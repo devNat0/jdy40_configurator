@@ -1,25 +1,6 @@
-use std::{time::Duration,
-    ascii::escape_default,
-    str
-};
+use std::time::Duration;
 
-use serialport::SerialPort;
-use jdy_40::{jdy_get, jdy_set, ATSet, AT};
-
-fn show(bs: &[u8]) -> String {
-    let mut visible = String::new();
-    for &b in bs {
-        let part: Vec<u8> = escape_default(b).collect();
-        visible.push_str(str::from_utf8(&part).unwrap());
-    }
-    visible
-}
-
-fn read_port(port: &mut Box<dyn SerialPort> ) -> String {
-    let mut serial_buf: Vec<u8> = vec![0; 32];
-    let size = port.read(serial_buf.as_mut_slice()).expect("No data found");
-    show(&serial_buf[0..size])
-}
+use jdy_40::{jdy_get, jdy_set, read_port, ATSet, AT};
 
 fn main() {
     let mut port = serialport::new("/dev/ttyUSB0", 9600)

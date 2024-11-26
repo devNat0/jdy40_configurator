@@ -1,5 +1,5 @@
-use core::panic;
-use std::io::Write;
+use core::{panic, str};
+use std::{ascii::escape_default, io::Write};
 use serialport::SerialPort;
 
 pub enum AT {
@@ -24,7 +24,7 @@ pub fn jdy_get(port: &mut Box<dyn SerialPort>, at: AT) -> Result<usize, std::io:
 }
 
 pub enum CLSSParam {
-    A0, //
+    A0,
     C0,
     C1,
     C2, // Normally Low
@@ -73,4 +73,19 @@ pub fn jdy_set(port: &mut Box<dyn SerialPort>, at: ATSet) -> Result<usize, std::
         }
     };
     port.write(command)
+}
+
+fn show(bs: &[u8]) -> String {
+    let mut visible = String::new();
+    for &b in bs {
+        let part: Vec<u8> = escape_default(b).collect();
+        visible.push_str(str::from_utf8(&part).unwrap());
+    }
+    visible
+}
+
+pub fn read_port(port: &mut Box<dyn SerialPort> ) -> String {
+    let mut serial_buf: Vec<u8> = vec![0; 32];
+    let size = port.read(serial_buf.as_mut_slice()).expect("No data found");
+    show(&serial_buf[0..size])
 }
