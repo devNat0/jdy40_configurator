@@ -1,13 +1,16 @@
-# Code to configure JDY_40 wireless module. 
-
-
+# Code to configure JDY_40 wireless module
+example usage
+```
+cargo run --example=print_config
+```
+---
 SET and CS are normally HIGH
 |      | SET               | CS          |
 |------|-------------------|-------------|
 | HIGH | Transmission Mode | GPIO Mode   |
 | LOW  | AT mode           | Serial Mode |
 
-# Serial Mode
+## Serial Mode
 CS must be LOW for Serial mode\
 SET and CS pin must both be LOW to be able to change configuration
 
@@ -17,19 +20,19 @@ When chips boots up, it sends "START\r\n" to the host in both Transparent/Transm
 
 When changing configuration, it sends "START\r\n", which probably means it restarts whenever you change a setting. If you set a config to its current value, it does nothing but responds with "OK\r\n"
 
-# GPIO Mode
+## GPIO Mode
 GPIO mode will not work if CS pin is LOW\
 SET pin is irrelevant for GPIO mode
 
-## Transmitter
+### Transmitter
 should be CLSS C0 or C1
 - C0: GPIO8 acts as (LED) output (untested)
 - C1: all 8 GPIO pins act as input
 
-an input must be pulled to LOW
+an input pin must be pulled to LOW
 
 
-## Receiver
+### Receiver
 should be set to CLSS C2 to C5
 - C2: GPIO is normally LOW, goes HIGH for 30ms after receiving signal. Does not detect button release. (useful for momentary button presses)
 
