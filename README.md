@@ -1,3 +1,6 @@
+# Code to configure JDY_40 wireless module. 
+
+
 SET and CS are normally HIGH
 |      | SET               | CS          |
 |------|-------------------|-------------|
